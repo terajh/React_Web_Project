@@ -62,7 +62,7 @@ router.post('/signup', async (req, res, next) => {
 router.post('/signin', async (req, res, next) => {
 	try {
 		const { id, pw } = req.body;
-		const ret = await isExistsAccountInfo(id, pw);
+		const ret = await isExistsAccountInfo(id, pw);;
 		req.session.user = { id };
 		res.send(ret);
 	} catch (err) {

@@ -7,7 +7,7 @@ const redisStore = require('connect-redis')(session);
 const redis = require('redis');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const io = require('socket.io'); 
+const socketio = require('socket.io'); 
 const cors = require('cors');
 
 const middlewares = require('./middlewares');
@@ -16,7 +16,7 @@ const initExpress = (redisClient) => {
 	const app = express();
 	const PORT = 3000;
 	
-	app.use(cors());
+	
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(
@@ -63,13 +63,15 @@ const main = () => {
 	initMongo().then(() => {
 		const redisClient = initRedis();
 		const server = initExpress(redisClient);
-		const socketServer = io(server);
+		const io= socketio.listen(server);
 		console.log("socket io open");
-		socketServer.on('connection', (socket) => {
+		io.on('connection', (socket) => {
 			console.log("connection info : ",socket.request.connection._peername);
 			socket.on('chat message',(msg)=>{
-				console.log(socket.handshake.address);
-				socketServer.emit('chat message',msg);
+				// console.log(socket.handshake.address);
+				console.log(msg);
+				debugger;
+				io.emit('chat message',msg);
 			});
 			socket.on('disconnect',()=>{
 				console.log('user disconnected');

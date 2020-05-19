@@ -1,13 +1,15 @@
 import React from 'react';
 
+
 import Header from './containers/Header';
 import CreateContent from './containers/CreateContent'
 import ReadContent from './containers/ReadContent'
 import UpdateContent from './containers/UpdateContent'
-import ChatContent from './containers/ChatContent'
+import ChatApp from './containers/ChatApp'
 import Subject from './containers/Subject'
 import Control from './containers/Control'
 import TOC from './containers/TOC'
+
 
 class Workspace extends React.Component {
 	constructor(props) {
@@ -39,16 +41,21 @@ class Workspace extends React.Component {
   	}
   	getContent(){
 		var _title, _desc, _article, _contents = null;
+		
 		if(this.state.mode ==='welcome'){
 		  _title = this.state.welcome.title;
 		  _desc = this.state.welcome.desc;
 		  _article = <ReadContent title={_title} desc={_desc}></ReadContent>
 		}
+		
+		
 		// rendering 재호출되면 else if 가 실행된다.
 		else if(this.state.mode === 'read'){
 		  _contents = this.getReadContent();
 		  _article = <ReadContent title={_contents.title} desc={_contents.desc}></ReadContent>
 		}
+		
+		
 		else if(this.state.mode === 'create'){
 		  _article = <CreateContent onSubmit={function(_title, _desc){
 			this.max_content_id = this.max_content_id+1;
@@ -61,6 +68,8 @@ class Workspace extends React.Component {
 			});
 		  }.bind(this)}></CreateContent>
 		}
+		
+		
 		else if(this.state.mode === 'update'){
 		  _contents = this.getReadContent();
 		  _article = <UpdateContent onSubmit={
@@ -79,8 +88,10 @@ class Workspace extends React.Component {
 			  });
 		  }.bind(this)} data={_contents}></UpdateContent>
 		}
+		
+		
 		else if(this.state.mode === 'chat'){
-			_article = <ChatContent></ChatContent>
+			_article = <ChatApp></ChatApp>
 		}
 		return _article;
 	}
