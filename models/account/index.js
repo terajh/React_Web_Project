@@ -5,4 +5,4 @@ const schema = {
 	pw: String
 };
 
-module.exports = mongoose.model('account', schema);
+module.exports = mongoose.model('accounts', schema);

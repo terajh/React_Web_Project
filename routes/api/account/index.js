@@ -3,6 +3,8 @@ const modAccount = require('../../../models/account');
 const util = require('./util');
 const Error = require('../util/error');
 
+
+
 const findById = async id => {
 	const accountInfo = await modAccount.findOne({ id });
 	return accountInfo;
@@ -49,6 +51,9 @@ const add = async (id, pw) => {
 	return true;
 };
 
+
+
+
 router.post('/signup', async (req, res, next) => {
 	try {
 		const { id, pw } = req.body;
@@ -70,6 +75,7 @@ router.post('/signin', async (req, res, next) => {
 	}
 });
 
+
 router.get('/signout', (req, res) => {
 	req.session.destroy(function(err) {
 		if (err) {
@@ -84,5 +90,7 @@ router.get('/signout', (req, res) => {
 router.get('/id', (req, res) => {
 	res.send(req.session && req.session.user && req.session.user.id);
 });
+
+
 
 module.exports = router;

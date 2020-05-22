@@ -9,7 +9,6 @@ module.exports = async function(req, res, next) {
 	const { html } = render(req.url, {}, initialData);
 	console.log(req.session.user.id);
 	res.render(path.resolve(__dirname, '../../../templates/default.html.ejs'), {
-		
 		markup: html,
 		cssFile: fileManifest['WorkspaceApp.css'],
 		jsFile: fileManifest['WorkspaceApp.js'],

@@ -9,8 +9,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const socketio = require('socket.io'); 
 const cors = require('cors');
-
 const middlewares = require('./middlewares');
+const axios = require('axios');
 
 const initExpress = (redisClient) => {
 	const app = express();
@@ -65,16 +65,23 @@ const main = () => {
 		const server = initExpress(redisClient);
 		const io= socketio.listen(server);
 		console.log("socket io open");
+		
 		io.on('connection', (socket) => {
 			console.log("connection info : ",socket.request.connection._peername);
 			socket.on('chat message',(msg)=>{
 				// console.log(socket.handshake.address);
-				console.log(msg);
-				debugger;
-				io.emit('chat message',msg);
+				io.emit('update message',msg);
 			});
-			socket.on('disconnect',()=>{
-				console.log('user disconnected');
+			socket.on('new members',(data)=>{
+				io.emit('update member');
+				console.log('new members',data);
+			});
+			socket.on('remove member',(data)=>{
+				io.emit('removes members',data);
+			})
+			socket.on('disconnect',(id)=>{
+				console.log('user disconnected',id);
+				// axios.get('/api/member/removemembers');
 			});
 			socket.on('scroll',()=>{
 				console.log('scroll changed');
