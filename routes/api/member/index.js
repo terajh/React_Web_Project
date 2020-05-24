@@ -42,8 +42,6 @@ const madd = async (id) => {
 };
 
 
-
-
 router.get('/writemembers', (req,res,next)=>{
 	try {
 		const ret = madd(req.session.user.id);

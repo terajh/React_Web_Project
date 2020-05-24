@@ -1,20 +1,27 @@
 import React from 'react';
 import axios from 'axios';
 import socketio from 'socket.io-client'
-import ChatApp from '../ChatApp'
-import Control from '../Control'
+import ChatApp from './ChatApp'
+import Control from './Control'
+import FileManager from './FileManager'
 
 class Body extends React.Component {
 	constructor(props) {
 		super(props);
 		this.socket = socketio(window.location.origin);
+		this._isMounted = false;
 		this.state = {
 			userId: '',
 			mode: 'control',
 			removemembers: []
 		};
 	}
-	
+	componentDidMount(){
+		this._isMounted = true;
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
   	getContent(){
 		var _article;
 		if(this.state.mode === 'chat'){
@@ -37,6 +44,9 @@ class Body extends React.Component {
 				});
 			});
 		}
+		else if(this.state.mode === 'fm'){
+			_article = <FileManager></FileManager>
+		}
 		return _article;
 	}
 	
@@ -49,7 +59,7 @@ class Body extends React.Component {
 		return (
 			<div>
 				<Control onChangeMode={function(_mode){
-				this.setState({
+				this._isMounted && this.setState({
 				  mode:_mode
 				})
 				}.bind(this)}></Control>
