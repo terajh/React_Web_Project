@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import axios from 'axios';
 import FileList from './FileList'
 import ReadFile from './ReadFile'
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 
 
@@ -30,9 +31,8 @@ class FileManager extends Component {
 		this._isMounted = true;
 		axios.get('/api/filemanager/getLists').then((data)=>{
 					var templist = data.data.list;
-					console.log("123123",templist);
 					var temp =  templist.map((e,index)=>{
-						return <div key={index}><a href="/" key={index} name={e} onClick={this.readContent}>{e}</a></div>;
+						return <div className="fileLists" key={index}><a href="/" key={index} name={e} onClick={this.readContent}>{e}</a></div>;
 					})
 					this.setState({
 						fileli:temp
@@ -45,14 +45,20 @@ class FileManager extends Component {
 	
 	readContent(e){
 		e.preventDefault();
-		var title = e.target.text;
+		var title = e.target.text.split('/').join('_#@');
+		
 		axios.get('/api/filemanager/readfile',{params :
 			{
-				data:e.target.text
+				data:title
 			} 
 		}).then(res=>{
+			let temp;
+			if(title.indexOf('_#@')!=-1){
+				temp = title.split('_#@').join('/');
+			}
+			else temp = title;
 			this.setState({
-				title:title,
+				title:temp,
 				desc:res.data
 			})
 		})
@@ -62,9 +68,8 @@ class FileManager extends Component {
 		
 		axios.get('/api/filemanager/getLists').then((data)=>{
 				var templist = data.data.list;
-				console.log("123123",templist);
 				var temp =  templist.map((e,index)=>{
-					return <div key={index}><a href="/" key={index} name={e} onClick={this.readContent}>{e}</a></div>;
+					return <div key={index} className="fileLists"><a href="/" key={index} name={e} onClick={this.readContent}>{e}</a></div>;
 				})
 				this.setState({
 					fileli:temp
@@ -83,19 +88,21 @@ class FileManager extends Component {
 		if(this._isMounted){
 			const formData = new FormData();
 			let tempFiles = Array.from(this.state.file);
+			
 			tempFiles.forEach(item=>{
-				console.log(item.webkitRelativePath);
+				// console.log(item,typeof(item));
+				formData.append('path',item.webkitRelativePath);
 				formData.append('file', item);
-				formData.append('aa',item.webkitRelativePath);
+				console.log(item, item.webkitRelativePath);
 			})
 			return axios.post("/api/filemanager/uploadFile",formData).then(res =>{
 				alert('upload 성공');
 				axios.get('/api/filemanager/getLists').then((data)=>{
 					var templist = data.data.list;
-					console.log("123123",templist);
 					var temp =  templist.map((e,index)=>{
-						return <div key={index}><a href="/" key={index} name={e} onClick={this.readContent}>{e}</a></div>;
-					})
+						return <div key={index+1} className="fileLists" ><a href="/" key={index} name={e} onClick={this.readContent}>{e}</a></div>;
+						
+					});
 					this.setState({
 						fileli:temp
 					})
@@ -108,11 +115,43 @@ class FileManager extends Component {
 		console.log("FileManager render");
       	// render라는 메소드를 오버라이딩해준다.
 		return (
-			<div>
-				<FileList list={this.state.fileli}></FileList>
-				<ReadFile list={this.state.fileli} title={this.state.title} desc={this.state.desc} updateContent={this.updateContent}></ReadFile>
-				<input type="file" name="user_file" onChange={(e)=>this.handleFileInput(e)} directory="" webkitdirectory=""></input>
-				<button type="button" value="제출" onClick={this.handlePost}>button</button>
+			<div id="container">
+				<div id="contentCover">
+					<div id="showlist"><FileList list={this.state.fileli} readContent={this.readContent}></FileList></div>
+					<div id="showcontent">
+						
+						<ReadFile list={this.state.fileli} 
+							 title={this.state.title} 
+							 desc={this.state.desc} 
+							 updateContent={this.updateContent} 
+							 readContent={this.readContent}>
+						</ReadFile>
+						
+						<div id="putFile">					
+							<div id="fileInput">
+								<p>폴더 선택 <Input style={{
+										width:'300px'						
+									}}  
+									type="file" 
+									name="user_file" 
+									onChange={(e)=>this.handleFileInput(e)} 
+									directory="" 
+									webkitdirectory="">
+								</Input></p>
+								<p>파일 선택 <Input  style={{
+										width:'300px'								
+										}} 
+										type="file" 
+										name="user_file" 
+										onChange={(e)=>this.handleFileInput(e)} 
+										accept=".zip, .tar">
+								</Input></p>
+								<Button id="filebutton" type="button" value="제출" onClick={this.handlePost}>업로드</Button>
+							</div>
+							
+						</div>						
+					</div>
+				</div>
 			</div>
       );
     }

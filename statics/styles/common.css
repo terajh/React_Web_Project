@@ -61,32 +61,48 @@ body {
 }
 
 #chatLog {
-    height: 700px;
+    height: 400px;
     overflow-y: auto;
     padding: 10px;
 }
 
 .myMsg {
-    text-align: left;
+    text-align: right;
 }
 
 .anotherMsg {
     text-align: left;
     margin-bottom: 5px;
 }
+.whisperMsg {
+    text-align: left;
+}
 
 .msg {
     /* display: inline-block; */
-	display: block;
-    border-radius: 15px;
+	display: inline-block;
+    border-radius: 4px;
     /* padding: 7px 15px; */
-    margin-bottom: 10px;
-    margin-top: 5px;
+    /* margin-bottom: 10px;
+    margin-top: 5px; */
 
 }
 
+.members {
+	text-align:center;
+	/* background-color: #e3e3e3; */
+	border: 3px solid #e3e3e3;
+}
+
+#memberHeader{
+	text-align:center;
+}
 .anotherMsg > .msg {
-    background-color: #f1f0f0;
+    background-color: #f100f0;
+
+}
+.whisperMsg > .msg {
+    background-color: #f1f000;
 
 }
 
@@ -103,17 +119,26 @@ body {
 #chatForm {
     display: block;
     width: 100%;
-    height: 50px;
+    height: 40px;
     border-top: 2px solid #f0f0f0;
 }
 
 #message {
-    width: 85%;
-    height: calc(100% - 1px);
+    width: 70%;
+    height: calc(100%);
     border: none;
     padding-bottom: 0;
+	margin-left:2px;
+	
 }
-
+#memberlist {
+	width:10%;
+	height:100%;
+}
+#send {
+	width:19%;
+	height:100%;
+}
 #message:focus {
     outline: none;
 }
@@ -154,4 +179,86 @@ body {
     padding-top: 20px;
     display: flex;
     justify-content: space-around;
+}
+
+#writecontent {
+	text-align:center;
+	width:30%;
+	float:right;
+	margin-right:10px;
+	margin-bottom:10px;
+}
+#deletecontent {
+	text-align:center;
+	width:30%;
+	float:right;
+}
+#showcontent {
+	margin-top: 2px;
+	margin-left:2px;
+	border:1px solid #f0f0f0;
+	width:530px;
+	height:100%;
+}
+#showlist {
+	width:30%;
+	margin-left:2px;
+	margin-top:2px;
+	padding-left:5px;
+	
+}
+.display-3 {
+	text-align:center;
+}
+.lead {
+	text-align:center;
+}
+#putFile {
+	border:1px solid #f0f0f0;
+	padding:1px;
+}
+
+#fileInput {
+	padding-top:14px;
+	padding-left:14px;
+}
+#fileList {
+	border : 1px solid #f0f0f0;
+	width:100%;
+	height:100%;
+	padding:10px;
+}
+#fileName {
+	border : 1px solid #f0f0f0;
+	padding-left:14px;
+	height:40px;
+}
+.fileLists {
+	padding-left:14px;
+}
+#read_description {
+	height: 300px;
+    overflow-y: auto;
+	width:500px;
+    padding: 10px;
+	margin-left:14px;
+}
+#title_name{
+	margin-left:14px;
+}
+#showTable {
+	margin:10px;
+}
+#filebutton {
+	margin-left:420px;
+}
+#read_title {
+	height: 40px;
+    text-align: center;
+	width:500px;
+    line-height: 60px;
+    font-size: 25px;
+    font-weight: 900;
+    border-bottom: 1px solid #ddd;
+	margin-left:14px;
 }

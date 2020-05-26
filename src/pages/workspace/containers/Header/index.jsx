@@ -1,7 +1,6 @@
 import React from 'react';
-import { DropdownToggle, UncontrolledDropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { DropdownToggle, UncontrolledDropdown, DropdownMenu, DropdownItem, NavItem, NavLink } from 'reactstrap';
 import axios from 'axios';
-
 import style from './style.scss';
 
 class Header extends React.Component {
@@ -33,10 +32,11 @@ class Header extends React.Component {
 						{userId}
 					</DropdownToggle>
 					<DropdownMenu right>
-						<DropdownItem onClick={this.signOut}>fucking</DropdownItem>
+						<DropdownItem onClick={this.signOut}>Logout</DropdownItem>
 					</DropdownMenu>
 				</UncontrolledDropdown>
 			</div>
+
 		);
 	}
 }

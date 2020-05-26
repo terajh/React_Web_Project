@@ -22,12 +22,40 @@ class ChatRoom extends Component {
     // react 의 Component 클래스를 상속
     render() {
 		const logs = this.props.data;
-		const messages = logs.map((e,index)=>{
-			
-			return <div className="msg" key={index}>
-				<span className="msg" key={index}>{e.name} : {e.message}</span>
-			</div>;
+		const mymessages = logs.map((e,index)=>{
+			var space = " ";
+			console.log("chatroom  ",typeof(e.name), typeof(e.message), typeof(e.to));
+			console.log(e.name , typeof(this.props.name), Number(this.props.name));
+			if(e.name === Number(this.props.name) && Number(e.to) != this.props.name){
+				return 	<div className="myMsg" key={index}>
+					<div className="msg" key={index}>
+						<span className="msg" key={index}> {e.name} : {e.message} </span>
+					</div>
+				</div>;
+			}
+			else if(e.to === 'every' && e.name != Number(this.props.name)){
+				return 	<div className="whisperMsg" key={index}>
+						<div className="msg" key={index}>
+							<span className="msg" key={index}> {e.name} : {e.message}</span>
+						</div>
+					</div>
+			}
+			else if(Number(e.to) === this.props.name){
+				if(e.name === this.props.name){
+					return <div className="myMsg" key={index}>
+						<div className="msg" key={index}>
+						<span className="msg" key={index}> {e.to}(나)에게 귓속말 => {e.name} : {e.message}</span>
+					</div></div>;
+				}else{
+					return <div className="whisperMsg" key={index}>
+						<div className="msg" key={index}>
+						<span className="msg" key={index}> {e.to}에게 귓속말 => {e.name} : {e.message}</span>
+					</div></div>;
+				}
+				
+			}
 		});
+		
         // console.log(messages);
 
       // render라는 메소드를 오버라이딩해준다.
@@ -35,12 +63,9 @@ class ChatRoom extends Component {
 		<div id="chatWrap">
 			<div id="chatHeader">ChatRoom</div>
 			<div id="chatLog">
-				<div className="anotherMsg"></div>
-				<div className="myMsg">
-					{messages}
-				</div>				
+				{mymessages}
 			</div>
-			<ChatClient></ChatClient>
+			<ChatClient members={this.props.members}></ChatClient>
 		</div>
 			
 				

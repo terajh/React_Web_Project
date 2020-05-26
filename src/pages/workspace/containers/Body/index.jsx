@@ -2,8 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import socketio from 'socket.io-client'
 import ChatApp from './ChatApp'
-import Control from './Control'
 import FileManager from './FileManager'
+import Control from './Control'
+import { Jumbotron, Container } from 'reactstrap';
 
 class Body extends React.Component {
 	constructor(props) {
@@ -12,8 +13,8 @@ class Body extends React.Component {
 		this._isMounted = false;
 		this.state = {
 			userId: '',
-			mode: 'control',
-			removemembers: []
+			removemembers: [],
+			mode:'control'
 		};
 	}
 	componentDidMount(){
@@ -36,7 +37,12 @@ class Body extends React.Component {
 			})
 		}
 		else if(this.state.mode === 'control'){
-			_article = <div>Main Pages</div>;
+			_article = <Jumbotron fluid>
+						<Container fluid>
+							<h1 className="display-3">Main Page</h1>
+							<p className="lead">Chat Room and File Manager Web Page</p>
+						</Container>
+				</Jumbotron>;
 			axios.get('/api/member/removemembers').then(()=>{
 				axios.get('/api/account/id').then(({data})=>{
 					this.socket.emit('remove member',data);

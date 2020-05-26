@@ -1,0 +1,10 @@
+.ReadContent {
+	:global(body) & &__title {
+		width:70%;
+		
+	}
+	:global(body) & &__description {
+		width:70%;
+		height:230px;
+	}
+}

@@ -47,6 +47,7 @@ const initExpress = (redisClient) => {
 	app.use(middlewares.error.ajaxHandler);
 	app.use(middlewares.error.handler);
 
+	
 	return require('http')
 		.createServer(app)
 		.listen(PORT, () => {
@@ -69,7 +70,7 @@ const main = () => {
 		io.on('connection', (socket) => {
 			console.log("connection info : ",socket.request.connection._peername);
 			socket.on('chat message',(msg)=>{
-				// console.log(socket.handshake.address);
+				console.log(msg.to+' update message');
 				io.emit('update message',msg);
 			});
 			socket.on('new members',(data)=>{
@@ -80,7 +81,8 @@ const main = () => {
 				io.emit('removes members',data);
 			})
 			socket.on('disconnect',(id)=>{
-				console.log('user disconnected',id);
+				console.log('user disconnected ####',id);
+				io.emit('removes members',id);
 				// axios.get('/api/member/removemembers');
 			});
 			socket.on('scroll',()=>{

@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import axios from 'axios';
-
+import style from './style.scss';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 class ReadFile extends Component { 
 	constructor(props){
 		super(props);
@@ -11,13 +12,14 @@ class ReadFile extends Component {
 		this._title='';
 		this._desc='';
 		this.state={
-			title:'',
-			desc:''
+			title:'FileName',
+			desc:'Description'
 		}
 		this.inputFormHandler = this.inputFormHandler.bind(this);
 		this.getTitleValue = this.getTitleValue.bind(this);
 		this.getDescValue = this.getDescValue.bind(this);
 		this.updatefile = this.updatefile.bind(this);
+		this.deletefile = this.deletefile.bind(this);
 };
 
 	componentDidMount(){
@@ -36,11 +38,23 @@ class ReadFile extends Component {
 	}
 	updatefile(e){
 		// this.props.title 파일로 write 요청 후 값 수정
+		var newtitle = String(this.state.title)
 		axios.get('/api/filemanager/updatefile',{params :
 			{
-				title:this.props.title,
+				title:this.props.title.split('/').join('_#@'),
 				descriptions:this.state.desc,
-				newtitle:this.state.title
+				newtitle:this.state.title.split('/').join('_#@')
+			} 
+		}).then(res=>{
+			alert('수정완료');
+			this.props.updateContent();
+		})
+	}
+	deletefile(e){
+		// this.props.title 파일로 write 요청 후 값 수정
+		axios.get('/api/filemanager/updatefile',{params :
+			{
+				title:this.props.title.split('/').join('_#@')
 			} 
 		}).then(res=>{
 			alert('수정완료');
@@ -48,6 +62,8 @@ class ReadFile extends Component {
 		})
 	}
 	getTitleValue(){
+		
+		
 		if(this._title!=this.props.title) {
 			this._title=this.props.title;
 			this.setState({
@@ -68,27 +84,49 @@ class ReadFile extends Component {
 	
     render() {
 		
-		console.log("ReadFile render");
+		console.log("ReadFile render", typeof(this.props.title.split('/')));
       	// render라는 메소드를 오버라이딩해준다.
 		return (
-			<article>
-                <p>
-					<input 
-						type="text" 
-						name="title" 
-						placeholder={this.props.title}
-						value={this.getTitleValue()}
-						onChange={this.inputFormHandler}
-					>
-					</input>
-				</p>
-				<p>
-					<textarea name="desc" placeholder={this.props.desc}
-					value={this.getDescValue()}
-					onChange={this.inputFormHandler}></textarea>
-				</p>
-				<button onClick={this.updatefile}>수정</button>
-            </article>
+			<table style={{
+					height:"100%"
+				}}>
+				<tbody>
+					<tr>
+						<FormGroup>
+							<Label id="title_name">FileName</Label>
+							<Input 
+							id="read_title"
+							type="email" 
+							name="title" 				
+							placeholder={this.props.title}
+							value={this.getTitleValue()}
+							onChange={this.inputFormHandler}
+							>
+							</Input>
+						</FormGroup>
+					</tr>
+
+					<tr style={{padding:'1px'}}>
+						<FormGroup>
+							<Input 
+								id="read_description" 
+								type="textarea"
+								name="desc" 
+								placeholder={this.props.desc}
+								value={this.getDescValue()}				
+								onChange={this.inputFormHandler}
+								>
+							</Input>
+						</FormGroup>
+					</tr>
+
+
+					<tr>
+						<Button id="deletecontent" onClick={this.deletefile}>삭제</Button>
+						<Button id="writecontent" onClick={this.updatefile}>수정</Button>
+					</tr>
+				</tbody>
+            </table>
       );
     }
   }
