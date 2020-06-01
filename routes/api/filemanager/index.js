@@ -17,20 +17,18 @@ fs.readdir('uploads/', (error) => {
 const upload = multer({
     storage: multer.diskStorage({
         destination(req, file, cb) {
-			// console.log("yploadadad",typeof(req.body.aa))
             cb(null, 'uploads/');
         },
         filename(req, file, cb) {
 			console.log(file,req.body.path);
-			if(typeof(req.body.path)==='string'){
+			
+			if(typeof(req.body.path)==='string'){ // 여러 파일중 첫번째 파일
 				let filenames = req.body.path;
 				let modnames = filenames.split('/').join('_#@');
 				const ext = path.extname(modnames);
             	cb(null, path.basename(modnames, ext) + ext)
-			}else if(typeof(req.body.path)==='undefined'){
-				const ext = path.extname(file.originalname);
-            	cb(null, path.basename(file.originalname, ext) + ext);
-			}else{
+			}
+			else{ // 여러 파일중 첫번째 파일 제외
 				let filenames = req.body.path[req.body.path.length - 1];
 				let modnames = filenames.split('/').join('_#@');
 				const ext = path.extname(modnames);
@@ -40,10 +38,8 @@ const upload = multer({
 		
     })
 })
-// 이미지 업로드를 위한 API
-// upload의 single 메서드는 하나의 이미지를 업로드할 때 사용
+
 router.post('/uploadFile', upload.array('file'), (req, res) => {
-	// console.log("updatatatatat",req.file);
     res.send(true);
 });
 
@@ -56,8 +52,9 @@ router.get('/getLists',(req,res)=>{
 			resultslist.push(temp);
 		})
 		res.send({list:resultslist});
-	})
-})
+	});
+});
+
 
 router.get('/readfile',(req,res)=>{
 	var filename = path.parse(req.query.data).base;
@@ -67,11 +64,14 @@ router.get('/readfile',(req,res)=>{
 		console.log("descriptons  ",data);
 		res.send(data);
 	})
+	
 })
+
 router.get('/updatefile',(req,res)=>{
 	var newFilename = req.query.newtitle;
 	var filename = req.query.title;
 	var descriptions = req.query.descriptions;
+	
 	console.log("update",req.query);
 	fs.rename('uploads/'+filename,'uploads/'+newFilename,(error)=>{
 		fs.writeFile('uploads/'+newFilename,descriptions,'utf-8',(error)=>{
@@ -79,9 +79,10 @@ router.get('/updatefile',(req,res)=>{
 		})
 	})
 })
+
 router.get('/deletefile',(req,res)=>{
 	var filename = req.query.title;
-	console.log("update",req.query);
+	console.log("delete",req.query);
 	fs.unlink('uploads/'+filename,(error)=>{
 		res.send(true);
 	})

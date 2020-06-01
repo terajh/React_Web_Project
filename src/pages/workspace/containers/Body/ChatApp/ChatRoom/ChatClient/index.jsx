@@ -20,7 +20,6 @@ class chatClient extends Component {
 	messageChanged(e){
 		this._isMounted && this.setState({message: e.target.value});
 	}
-	// bind 해줘야 됨
 	
 	// 서버에 이름과 메시지 전송
 	send(e){
@@ -32,10 +31,7 @@ class chatClient extends Component {
 			message: this.state.message,
 			to:to
 		});
-		
-		console.log(this.socket.handshake);
-		this._isMounted && this.setState({message:''});
-		// 입력양식을 다시 비운다.
+		this._isMounted && this.setState({message:''}); // 데이터 전송 후 입력양식을 다시 비운다.
 	}
 	
 	componentDidMount() {
@@ -58,28 +54,25 @@ class chatClient extends Component {
 			return <option value={e} key={index}>{e}</option>
 		})
 	}
-    // react 의 Component 클래스를 상속
+	
     render() {
         console.log('ChatClient render');
-      // render라는 메소드를 오버라이딩해준다.
-      return (
-		<form id="chatForm"  onSubmit={function(e){
-			e.preventDefault();
-			this.send(e);
-		}.bind(this)}>
-			
-			
-			<select id="memberlist" style={{
-				left:'1px',
-				right:'1px',
-				width:'10%'
-			  }}>{this.getmemberlist()}</select>
-			<input size="30" id="message" onChange={this.messageChanged} value={this.state.message}></input>
-			<input type="hidden" name="name" id="nickname" value={this.state.name}></input>
-			<button id="send">send</button>
-			
-		</form>
-      );
+      	return (
+			<form id="chatForm"  
+				onSubmit={function(e){
+					e.preventDefault();
+					this.send(e); // 메시지 전송
+				}.bind(this)}>
+				<select id="memberlist" style={{
+					left:'1px',
+					right:'1px',
+					width:'10%'
+				}}>{this.getmemberlist()}</select>
+				<input size="30" id="message" onChange={this.messageChanged} value={this.state.message}></input>
+				<input type="hidden" name="name" id="nickname" value={this.state.name}></input>
+				<button id="send">send</button>
+			</form>
+      	);
     }
   }
 

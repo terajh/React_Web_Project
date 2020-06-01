@@ -84,13 +84,13 @@ class FileManager extends Component {
 			file : e.target.files
 		})
 	}
+	
 	handlePost(){
 		if(this._isMounted){
 			const formData = new FormData();
 			let tempFiles = Array.from(this.state.file);
 			
 			tempFiles.forEach(item=>{
-				// console.log(item,typeof(item));
 				formData.append('path',item.webkitRelativePath);
 				formData.append('file', item);
 				console.log(item, item.webkitRelativePath);
@@ -117,7 +117,9 @@ class FileManager extends Component {
 		return (
 			<div id="container">
 				<div id="contentCover">
-					<div id="showlist"><FileList list={this.state.fileli} readContent={this.readContent}></FileList></div>
+					<div id="showlist">
+						<FileList list={this.state.fileli} readContent={this.readContent}></FileList>
+					</div>
 					<div id="showcontent">
 						
 						<ReadFile list={this.state.fileli} 

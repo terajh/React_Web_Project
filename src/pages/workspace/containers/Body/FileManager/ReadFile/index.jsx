@@ -24,35 +24,37 @@ class ReadFile extends Component {
 
 	componentDidMount(){
 		this._isMounted = true;
-		
+	
 		this.setState({
 			title:this.props.title,
 			desc:this.props.desc
 		})
 	}
+	
 	componentWillUnmount() {
    		this._isMounted = false;
 	}
+	
 	inputFormHandler(e){
 		this.setState({[e.target.name]:e.target.value});
 	}
-	updatefile(e){
-		// this.props.title 파일로 write 요청 후 값 수정
+	updatefile(e){ // 변경된 파일명, 파일내용 업데이트하기
 		var newtitle = String(this.state.title)
-		axios.get('/api/filemanager/updatefile',{params :
-			{
-				title:this.props.title.split('/').join('_#@'),
-				descriptions:this.state.desc,
-				newtitle:this.state.title.split('/').join('_#@')
-			} 
+		axios.get('/api/filemanager/updatefile',{
+			params :
+				{
+					title : this.props.title.split('/').join('_#@'),
+					descriptions : this.state.desc,
+					newtitle : this.state.title.split('/').join('_#@')
+				} 
 		}).then(res=>{
 			alert('수정완료');
 			this.props.updateContent();
 		})
 	}
-	deletefile(e){
-		// this.props.title 파일로 write 요청 후 값 수정
-		axios.get('/api/filemanager/updatefile',{params :
+	
+	deletefile(e){ // 파일 삭제하기
+		axios.get('/api/filemanager/deletefile',{params :
 			{
 				title:this.props.title.split('/').join('_#@')
 			} 
@@ -61,9 +63,8 @@ class ReadFile extends Component {
 			this.props.updateContent();
 		})
 	}
-	getTitleValue(){
-		
-		
+	
+	getTitleValue(){ // update 되었는지 파악
 		if(this._title!=this.props.title) {
 			this._title=this.props.title;
 			this.setState({
@@ -72,7 +73,8 @@ class ReadFile extends Component {
 		}
 		return this.state.title;
 	}
-	getDescValue(){
+	
+	getDescValue(){ // update 되었는지 파악
 		if(this._desc!=this.props.desc) {
 			this._desc=this.props.desc;
 			this.setState({
@@ -83,9 +85,7 @@ class ReadFile extends Component {
 	}
 	
     render() {
-		
 		console.log("ReadFile render", typeof(this.props.title.split('/')));
-      	// render라는 메소드를 오버라이딩해준다.
 		return (
 			<table style={{
 					height:"100%"
@@ -98,28 +98,26 @@ class ReadFile extends Component {
 							id="read_title"
 							type="email" 
 							name="title" 				
-							placeholder={this.props.title}
+							placeholder=""
 							value={this.getTitleValue()}
 							onChange={this.inputFormHandler}
 							>
 							</Input>
 						</FormGroup>
 					</tr>
-
 					<tr style={{padding:'1px'}}>
 						<FormGroup>
 							<Input 
 								id="read_description" 
 								type="textarea"
 								name="desc" 
-								placeholder={this.props.desc}
+								placeholder=""
 								value={this.getDescValue()}				
 								onChange={this.inputFormHandler}
 								>
 							</Input>
 						</FormGroup>
 					</tr>
-
 
 					<tr>
 						<Button id="deletecontent" onClick={this.deletefile}>삭제</Button>

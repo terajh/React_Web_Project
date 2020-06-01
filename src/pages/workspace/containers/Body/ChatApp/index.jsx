@@ -19,17 +19,13 @@ class ChatApp extends Component {
 };
 
 	componentDidMount(){
-		
 		// 실시간으로 로그를 받게 설정한다.
 		axios.get('/api/account/id').then((data)=>{
 			this.user = data.data;
 		});
 		this._isMounted = true;
-		console.log("set message log",this.user);
 		
-		
-		this._isMounted && this.socket.on('update message',(obj)=>{
-			console.log(typeof(Number(obj.to)),typeof(obj.name),typeof(this.user));
+		this.socket.on('update message',(obj)=>{
 			const logs2 = Array.from(this.state.logs);
 			if(obj.name===this.user || Number(obj.to)===this.user || obj.to==='every'){
 				obj.key = 'key_'+(this.state.logs.length + 1);
@@ -37,25 +33,22 @@ class ChatApp extends Component {
 				logs2.push(obj); // 로그에 추가하기
 				if(this._isMounted) this.setState({logs:logs2});
 			}
-			
 		});
 		
-		
-		this._isMounted && this.socket.on('update member',()=>{
+		this.socket.on('update member',()=>{
 			axios.get('/api/member/readmembers').then(({data})=>{
-				console.log('updatae members to',data);
 				let newMembers = [];
 				data.forEach((e)=>{
 					newMembers.push(e.name);
 				})
-				this._isMounted && this.setState({
+				this.setState({
 					members:newMembers
 				});
 			});
 		});
-		this._isMounted && this.socket.on('removes members',(name)=>{
+		
+		this.socket.on('removes members',(name)=>{
 			axios.get('/api/member/readmembers').then(({data})=>{
-				console.log('remove members to',data);
 				let newMembers = [];
 				data.forEach((e)=>{
 					if(e.name!=name){
@@ -63,35 +56,41 @@ class ChatApp extends Component {
 					}
 				});
 				console.log("remove and",newMembers);
-				
-				this._isMounted && this.setState({
+				this.setState({
 					members:newMembers
 				});
 			});
 		});
 	}
+	
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
-    // react 의 Component 클래스를 상속
+	
     render() {
 		console.log('chatapp render');
-		this._isMounted && axios.get('/api/member/readmembers').then(({ data }) => {
-			console.log("axios in onchat readMembers",data);
+		
+		axios.get('/api/member/readmembers').then(({ data }) => {
 			var memberList = [];
 			data.forEach((e)=>{
 				memberList.push(e.name);
 			});
 			this.members=memberList;
-		});
-		console.log("chatapp render");
-		// console.log(this.props.data);
-      // render라는 메소드를 오버라이딩해준다.
+		}); // render 될때마다 chat member 계속 업데이트한다.
+		
 		return (
 			<div id="container">
 				<div id="contentCover">
-					<ChatRoom members={this.state.members} name={this.user} data={this.state.logs} socket={this.socket}></ChatRoom>
-					<ChatList data={this.state.members} socket={this.socket}></ChatList>
+					<ChatRoom 
+						members={this.state.members} 
+						name={this.user} 
+						data={this.state.logs} 
+						socket={this.socket}>
+					</ChatRoom>
+					<ChatList 
+						data={this.state.members} 
+						socket={this.socket}>
+					</ChatList>
 				</div>
 			</div>
       );

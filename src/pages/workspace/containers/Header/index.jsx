@@ -18,7 +18,7 @@ class Header extends React.Component {
 			});
 		});
 	}
-
+	
 	signOut = () => {
 		window.location.href = '/api/account/signout';
 	};

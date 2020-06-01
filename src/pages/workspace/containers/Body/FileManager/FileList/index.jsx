@@ -38,18 +38,16 @@ class FileList extends Component {
 	}
 
 	
-    // react 의 Component 클래스를 상속
     render() {
 		console.log("FileList render");
-      	// render라는 메소드를 오버라이딩해준다.
 		return (
 			<table id="fileList">
-				
-				<tr><th id="fileName" style={{align:'center'}}>File name</th></tr>
-				
-				<div>
+				<tr>
+					<th id="fileName" style={{align:'center'}}>File name</th>
+				</tr>
+				<tr>
 					{this.props.list}
-				</div>
+				</tr>
 			</table>
 			)
       
