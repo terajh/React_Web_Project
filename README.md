@@ -1,3 +1,5 @@
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/terajh/React_Web_Project)](https://hits.seeyoufarm.com) 
+
 ### 프로젝트 목적
 - Node.js, Socket.io, MongoDB, React, Bootstrap 이용해보기
 
